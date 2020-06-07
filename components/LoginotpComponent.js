@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, TextInput, View, StyleSheet } from 'react-native'
+import { StatusBar, TextInput, View, StyleSheet, Alert } from 'react-native'
 import { Container, Header, Content, Text } from 'native-base'
 import { Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -7,8 +7,33 @@ import Style from '@Theme/Style'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 
 class Loginotp extends Component {
+
+  state = {
+    code: null
+  }
+
+  confirmCode = () => {
+    const { confirm } = this.props.route.params
+
+    const code = this.state.code;
+    const confirmation = confirm
+
+    if (confirmation && code && code.length >= 6) {
+      confirmation.confirm(code).then((result) => {
+        if (result)
+          this.props.navigation.navigate("Root")
+      }).catch((err) => {
+        Alert.alert("Error in confirmation")
+      });
+
+    } else {
+      Alert.alert("Warning", "Enter valid otp")
+    }
+
+  }
+
   render() {
-    var {navigate, replace } = this.props.navigation
+    var { navigate, replace } = this.props.navigation
 
     return <Container style={Style.bgMainIntro}>
       <Header style={Style.navigation}>
@@ -16,21 +41,21 @@ class Loginotp extends Component {
 
         <View style={Style.actionBarLeft}>
           <Button
-              buttonStyle={{backgroundColor: 'rgba(52, 52, 52, 0)'}}
-              titleStyle={Style.loginBtnText}
-              iconContainerStyle={Style.textWhite}
-              onPress={() => {
-                navigate("Login")
-              }}
-              icon={
-                <Icon
-                  name="arrow-left"
-                  size={15}
-                  color="white"
-                />
-              }
-              iconRight
-            />
+            buttonStyle={{ backgroundColor: 'rgba(52, 52, 52, 0)' }}
+            titleStyle={Style.loginBtnText}
+            iconContainerStyle={Style.textWhite}
+            onPress={() => {
+              navigate("Login")
+            }}
+            icon={
+              <Icon
+                name="arrow-left"
+                size={15}
+                color="white"
+              />
+            }
+            iconRight
+          />
         </View>
         <View style={Style.actionBarMiddle}>
           <Text style={Style.actionBarText}>{'Verification'.toUpperCase()}</Text>
@@ -44,24 +69,23 @@ class Loginotp extends Component {
           <Text style={Styles.title}>We sent you a code to verify your mobile number</Text>
           <Text style={Styles.subTitle}>Enter your OTP Code here</Text>
           <View>
-          <OTPInputView
-    style={{height: 200}}
-    pinCount={4}
-    // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-    // onCodeChanged = {code => { this.setState({code})}}
-    autoFocusOnLoad
-    codeInputFieldStyle={Style.underlineStyleBase}
-    codeInputHighlightStyle={Style.underlineStyleHighLighted}
-    onCodeFilled = {(code => {
-        console.log(`Code is ${code}, you are good to go!`)
-    })}
-/>
+            <OTPInputView
+              style={{ height: 200 }}
+              pinCount={6}
+
+              // code={this.state.code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
+              // onCodeChanged = {code => { this.setState({code})}}
+              autoFocusOnLoad
+              codeInputFieldStyle={Style.underlineStyleBase}
+              codeInputHighlightStyle={Style.underlineStyleHighLighted}
+              onCodeFilled={(code => {
+                this.setState({ code })
+              })}
+            />
             <Button
               buttonStyle={Styles.loginBtn}
               titleStyle={Styles.loginBtnText}
-              onPress={() => {
-                navigate("Root")
-              }}
+              onPress={this.confirmCode.bind(this)}
               icon={
                 <Icon
                   name="arrow-right"
