@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import Main from './components/MainComponent';
-import HomeScreen from './screens/HomeScreen';
+import MainScreen from './components/MainscreenComponent';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './redux/configureStore';
 
+const store = ConfigureStore();
 export default function App() {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
@@ -18,19 +21,32 @@ export default function App() {
   }
 
   useEffect(() => {
+    // const update = {
+    //   displayName: 'Rishabh Sogani',
+    //   photoURL: 'https://my-cdn.com/assets/user/123.png',
+    // };
+
+    // console.log(update)
+    
+    // auth().currentUser.updateProfile(update);
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
+  
 
   if (initializing) return null;
 
   if (!user) {
     return (
-      <Main/>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
   }
 
   return (
-    <HomeScreen/>
+    <Provider store={store}>
+    <MainScreen/>
+      </Provider>
   );
 }

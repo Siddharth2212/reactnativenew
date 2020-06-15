@@ -1,9 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import * as React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import BottomTabNavigator from '../navigation/BottomTabNavigator';
+import TopTabNavigator from '../navigation/TopTabNavigator';
+import Home from './HomeComponent';
+
 import Login from './LoginComponent';
 import Loginotp from './LoginotpComponent';
-import HomeScreen from '../screens/HomeScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -15,9 +18,10 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
         <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen options={{headerShown: false}} name="Home" component={Home} />
         <Stack.Screen options={{headerShown: false}} name="Login" component={Login} />
         <Stack.Screen options={{headerShown: false}} name="Loginotp" component={Loginotp} />
-        <Stack.Screen options={{headerShown: false}} name="Root" component={HomeScreen} />
+      <Stack.Screen name="Root" component={TopTabNavigator} />
     </Stack.Navigator>
         </NavigationContainer>
       </View>

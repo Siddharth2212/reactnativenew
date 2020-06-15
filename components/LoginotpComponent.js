@@ -15,6 +15,10 @@ class Loginotp extends Component {
   confirmCode = () => {
     const { confirm } = this.props.route.params
 
+    const name = this.props.route.name;
+    console.log("LOGIN NAME");
+    console.log(name);
+
     const code = this.state.code;
     const confirmation = confirm
 

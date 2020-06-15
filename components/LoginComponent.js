@@ -15,7 +15,8 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      phoneNumber: null
+      phoneNumber: null,
+      name: null
     }
   }
 
@@ -24,6 +25,7 @@ export default class extends React.Component {
   handleLogin = () => {
     const { navigate } = this.props.navigation;
     const phone = this.state.phoneNumber;
+    const name = this.state.name;
 
     if (phone && phone.length >= 10) {
       const withCountryCode = "+91" + phone;
@@ -31,7 +33,7 @@ export default class extends React.Component {
       auth().signInWithPhoneNumber(withCountryCode).then((confirm) => {
         console.log("hereee");
         console.log({confirm});
-        navigate("Loginotp", { confirm })
+        navigate("Loginotp", { confirm, name })
       }).catch((err) => {
         console.log("error sending otp aeohg");
         console.log(err);
@@ -56,7 +58,7 @@ export default class extends React.Component {
           <Text style={Styles.logoText}>{'APP NAME'.toUpperCase()}</Text>
           <View>
             <Text style={Styles.textLabel}>{'Name'.toUpperCase()}</Text>
-            <TextInput style={Styles.textInput} />
+            <TextInput onChangeText={(text) => this.setState({ name: text })} style={Styles.textInput} />
             <Text style={Styles.textLabel}>{'Mobile No.'.toUpperCase()}</Text>
             <TextInput onChangeText={(text) => this.setState({ phoneNumber: text })} style={Styles.textInput} />
             <Button

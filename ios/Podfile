@@ -79,6 +79,10 @@ target 'MyTestApp' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'MyTestAppTests' do
     inherit! :complete
     # Pods for testing

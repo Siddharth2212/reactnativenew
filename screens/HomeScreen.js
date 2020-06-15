@@ -1,60 +1,109 @@
-import * as React from 'react';
-import { Platform, StyleSheet, View, FlatList } from 'react-native';
-import {  ListItem, Text, Button } from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { Platform, StyleSheet, View, FlatList, Image } from 'react-native';
+import {  ListItem, Text, Button, SearchBar } from 'react-native-elements';
 import { Icon } from 'react-native-elements'
+import { connect } from 'react-redux';
+import {Loading} from "../components/LoadingComponent"
 
-const list = [
-  {
-    name: 'Lorem Ipsum',
-    avatar_url: 'https://pbs.twimg.com/profile_images/573391750829506560/Vgk8ZOfR.jpeg'
-  },
-  {
-    name: 'Loreum Ipsruao',
-    avatar_url: 'https://qph.fs.quoracdn.net/main-thumb-8435687-200-impopjgvpbxmkmntdtotouxtkjvvjguu.jpeg'
+// const mapStateToProps = state => {
+//     return {
+//     }
+//   }
+var avatar_url = 'https://pbs.twimg.com/profile_images/573391750829506560/Vgk8ZOfR.jpeg';
+
+
+function HomeScreen( props) {
+  useEffect(() => {
+    console.log("ahiegaheggeaoheg");
+  }, []);
+
+  const [search, setSearch] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [guests, setGuests] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  function updateSearch(search) {
+    setSearch(search);
+    if (search !== "") {
+      setLoader(true);
+    }
+    else {
+      setLoader(false)
+    }
+  };
+
+  function toggleModal() {
+    setShowModal(!showModal);
   }
-]
 
+  function toggleModal2() {
+    setShowModal(!showModal);
+    navigation.navigate('Details')
+  }
 
-export default function HomeScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={list}
-        renderItem={({ item }) => (
-          <ListItem
-            topDivider
-            bottomDivider
-            title={item.name}
-            badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
+  if(false){
+    return  <Loading text="Loading" />
+  }
+  else{
+    return (
+      <View style={styles.container}>
+        {/* <View style={styles.welcomeContainer}>
+        <Image
+          source={
+            __DEV__
+              ? require('../assets/images/qutulogo.jpeg')
+              : require('../assets/images/qutulogo.jpeg')
+          }
+          style={styles.welcomeImage}
+        />
+      </View>
 
-            subtitle={
-              <View style={{ flex: 1, flexDirection: 'row' }}>
-                <View>
-                  <Text>Lorem aeghaoeigh aoegh aeoigh aoeighaoi egha eoghaioe ghaioeg haoieh aoieh ioaehgoiaeh oiaehgo iaeh oiaehiaehgoaie gh</Text>
-                </View>
-                <View>
-                  <Button
-                    title={`Call`}
-                    type="outline"
-                    raised
-                    onPress={() => console.log("video call code")}
-                    icon={
-                      <Icon
-  name='phone' color="blue"/>
-                    }
-                  />
-                </View>
-              </View>
-            }
-            bottomDivider
-            chevron
-            leftAvatar={{ source: { uri: item.avatar_url } }}
-          />
-        )}
+      <View style={styles.getStartedContainer}>
+        <Text style={styles.getStartedText}>Welcome Siddharth:</Text>
+        <Text style={styles.getStartedText}>
+          Search who you want to talk to
+            {search !== "" && "Your search:" + search}
+        </Text>
+      </View> */}
+
+      <SearchBar
+        showLoading={loader}
+        showCancel
+        lightTheme
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={search}
       />
-    </View>
-  );
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={[]}
+          renderItem={({ item }) => (
+            <ListItem
+              topDivider
+              bottomDivider
+              title={item.name}  
+              subtitle={
+                <View style={{ flex: 1, flexDirection: "row"}}>
+                  <View style={{flex:12}}>
+              <Text>{item.description}</Text>
+                  </View>
+                  <View style={{flex: 1}}>
+                  <Icon
+  raised
+  name='call'
+  color='blue'
+  onPress={() => console.log('hello')} />
+                  </View>
+                </View>
+              }
+              bottomDivider
+              chevron
+              leftAvatar={{ source: { uri: avatar_url } }}
+            />
+          )}
+        />
+      </View>
+    );
+  }
 }
 
 HomeScreen.navigationOptions = {
@@ -232,3 +281,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 });
+
+export default (HomeScreen);
